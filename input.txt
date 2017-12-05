@@ -1,0 +1,13 @@
+meanAtomNumber 100
+nstore 100
+steadyTime 10
+yWall 5
+sigmaXX 0
+sigmaXZ 0
+transitTime 1
+sigmaPX 0
+sigmaPY 0
+sigmaPZ 0
+meanAtomGeneratingNumber 1
+gammac 0.1
+name oneRun_tau_1_N0100
