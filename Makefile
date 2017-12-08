@@ -5,14 +5,11 @@ LIBPATH = -L/usr/local/lib -lgsl
 CXXFLAGS = -c -O3
 CXX=g++
 
-beamLaser : beamLaser.o RNG.o
-	$(CXX) -Wall $(LIBPATH) beamLaser.o RNG.o -o beamLaser
+superradiantLaser : superradiantLaser.o
+	$(CXX) -Wall $(LIBPATH) superradiantLaser.o -o superradiantLaser
 
-beamLaser.o : beamLaser.cpp 
-	$(CXX) $(CXXFLAGS) $(INCPATH) beamLaser.cpp
-
-RNG.o : RNG.cpp
-	$(CXX) $(CXXFLAGS) $(INCPATH) RNG.cpp
+superradiantLaser.o : superradiantLaser.cpp 
+	$(CXX) $(CXXFLAGS) $(INCPATH) superradiantLaser.cpp
 
 clean :
-	rm *.o beamLaser
+	rm *.o superradiantLaser
