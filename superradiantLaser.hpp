@@ -2,11 +2,6 @@
 #define __SUPERRADIANTLASER__HPP__
 //This program is used to simulate the superradiant laser using the cumulant expansion method.
 
-//Avoid warnings on Eigen package
-//#pragma GCC diagnostic ignored "-Wignored-attributes"
-//#pragma GCC diagnostic ignored "-Wmisleading-indentation"
-//#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 //Include Eigen package
 //Work in Eigen namespace
 #include <Eigen/Core>
@@ -23,7 +18,7 @@ using namespace Eigen;
 #include <getopt.h>
 #include <time.h>
 
-#define NVAR 3 // 3 variables; sigmax, sigmay, sigmaz
+#define NVAR 3 // 3 variables; sigmaX, sigmaY, sigmaZ
 
 //Define the complex I and ONE
 static const std::complex<double> I = std::complex<double>(0.0,1.0);
@@ -33,7 +28,7 @@ typedef struct {
   const char* configFile;
 } CmdLineArgs;
 
-const char* usageHeader = "\nBeam Laser Simulation.\n";
+const char* usageHeader = "\nSuperradiant Laser Simulation.\n";
 const char* usageMessage =
   "\n"
   "Usage:         "
