@@ -1,7 +1,0 @@
-dt 0.001
-tmax 10
-nstore 100
-nAtom 1
-gammac 0.1
-repumping 10
-name N1_repumping10

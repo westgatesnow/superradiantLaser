@@ -1,7 +1,0 @@
-dt 0.01
-tmax 1000
-nstore 100
-nAtom 3
-gammac 0.1
-repumping 0.15
-name N3_repumping0p15

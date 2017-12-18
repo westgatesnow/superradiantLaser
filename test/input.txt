@@ -1,0 +1,7 @@
+dt 0.01
+tmax 50
+nstore 100
+nAtom 2
+gammac 0.1
+repumping 0.5
+name test

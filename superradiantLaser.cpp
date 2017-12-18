@@ -71,16 +71,16 @@ MatrixXd RHS(const MatrixXd& cov, const Param& param)
   double gc = param.gammac;
   double w = param.repumping;
   int nAtom = param.nAtom;
-  
+
   //right hand side of the DE set
    for (int i = 0; i < nAtom; i++) {
     //diagonal
-    RHS(i,i) = 2*w*(1-cov(i,i))-1/2*gc*cov.colwise().sum()(i)-1/2*gc*cov.rowwise().sum()(i);
+    RHS(i,i) = 2*w*(1-cov(i,i))-0.5*gc*cov.colwise().sum()(i)-0.5*gc*cov.rowwise().sum()(i);
     //off-diagonal; we used the fact that RHS is symmetric
     for (int j = i+1; j < nAtom; j++) {
       RHS(i,j) = -(2*w+gc*cov(i,i)+gc*cov(j,j))*cov(i,j)
-              +gc/2*(2*cov(i,i)-1)*cov.colwise().sum()(j)
-              +gc/2*(2*cov(j,j)-1)*cov.rowwise().sum()(i);
+              +gc/2.0*(2*cov(i,i)-1)*cov.colwise().sum()(j)
+              +gc/2.0*(2*cov(j,j)-1)*cov.rowwise().sum()(i);
       RHS(j,i) = RHS(i,j);
     }
   }
@@ -96,7 +96,7 @@ void advanceInterval(MatrixXd& cov, const Param& param)
   //Define a new covariance matrix with initial value cov;
   MatrixXd newCov(cov);
   //Using RK2 method.
-  newCov += dt/2*RHS(cov, param);
+  newCov += dt/2.0*RHS(cov, param);
   //Second round
   cov += dt*RHS(newCov, param);
 }
@@ -104,7 +104,7 @@ void advanceInterval(MatrixXd& cov, const Param& param)
 void storeObservables(Observables& observables, int s, const MatrixXd& cov, 
     const Param& param)
 {
-  observables.intensity(s) = param.gammac*cov.sum();
+  observables.intensity(s) = param.gammac*cov.sum();//
   observables.intensityUnCor(s) = param.gammac*cov.diagonal().sum();
   observables.inversion(s) = (2*cov.diagonal().sum()-param.nAtom)/param.nAtom;
   observables.spinSpinCor(s) = (cov.sum()-cov.diagonal().sum())/(param.nAtom*(param.nAtom-1));
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
   getParam (config.configFile, &param);
 	
   //Set up initial conditions
-  MatrixXd cov = MatrixXd::Zero(param.nAtom, param.nAtom);
+  MatrixXd cov = MatrixXd::Identity(param.nAtom, param.nAtom);
   Observables observables(param.nstore);
 
   //Start simulation
