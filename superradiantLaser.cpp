@@ -75,10 +75,10 @@ MatrixXd RHS(const MatrixXd& cov, const Param& param)
   //right hand side of the DE set
    for (int i = 0; i < nAtom; i++) {
     //diagonal
-    RHS(i,i) = 2*w*(1-cov(i,i))-0.5*gc*cov.colwise().sum()(i)-0.5*gc*cov.rowwise().sum()(i);
+    RHS(i,i) = w*(1-cov(i,i))-0.5*gc*cov.colwise().sum()(i)-0.5*gc*cov.rowwise().sum()(i);
     //off-diagonal; we used the fact that RHS is symmetric
     for (int j = i+1; j < nAtom; j++) {
-      RHS(i,j) = -(2*w+gc*cov(i,i)+gc*cov(j,j))*cov(i,j)
+      RHS(i,j) = -(w+gc*cov(i,i)+gc*cov(j,j))*cov(i,j)
               +gc/2.0*(2*cov(i,i)-1)*cov.colwise().sum()(j)
               +gc/2.0*(2*cov(j,j)-1)*cov.rowwise().sum()(i);
       RHS(j,i) = RHS(i,j);

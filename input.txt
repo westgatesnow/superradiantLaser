@@ -3,5 +3,5 @@ tmax 20
 nstore 100
 nAtom 200
 gammac 0.1
-repumping 5
-name N200_repumping5
+repumping 10
+name N200_repumping10
