@@ -1,0 +1,7 @@
+dt 0.01
+tmax 20
+nstore 100
+nAtom 100
+gammac 0.1
+repumping 13.1
+name N100_repumping13.1

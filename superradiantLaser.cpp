@@ -124,7 +124,7 @@ void evolve(MatrixXd& cov, const Param& param, Observables& observables)
     if ((long)(n+1)*param.nstore/(nTimeStep+1) > s) {
       storeObservables(observables, s++, cov, param);
       //debug
-      std::cout << "This is timestep " << n << "/" << nTimeStep << std::endl << std::endl;
+      //std::cout << "This is timestep " << n << "/" << nTimeStep << std::endl << std::endl;
       //debug
     }
     if (n != nTimeStep)
