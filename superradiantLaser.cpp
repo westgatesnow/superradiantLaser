@@ -65,13 +65,20 @@ void getParam(const char* filename, Param *param)
   }
 }
 
+void generateInitialAtoms(MatrixXd& cov, const Param& param)
+{
+  //Start from Exctied states
+  //cov = MatrixXd::Identity(param.nAtom, param.nAtom);
+  //Start from Ground states
+  cov = MatrixXd::Zero(param.nAtom, param.nAtom);
+}
+
 MatrixXd RHS(const MatrixXd& cov, const Param& param)
 {
   MatrixXd RHS(cov);
   double gc = param.gammac;
   double w = param.repumping;
   int nAtom = param.nAtom;
-
   //right hand side of the DE set
    for (int i = 0; i < nAtom; i++) {
     //diagonal
@@ -92,7 +99,6 @@ void advanceInterval(MatrixXd& cov, const Param& param)
   double gc = param.gammac;
   double dt = param.dt;
   int nAtom = param.nAtom;
-  
   //Define a new covariance matrix with initial value cov;
   MatrixXd newCov(cov);
   //Using RK2 method.
@@ -152,6 +158,7 @@ void mkdir(Param& param) {
 
 int main(int argc, char *argv[])
 {
+  //Configuration
   CmdLineArgs config;
   getOptions(argc, argv, &config);
 
@@ -160,12 +167,12 @@ int main(int argc, char *argv[])
   getParam (config.configFile, &param);
 	
   //Set up initial conditions
-  MatrixXd cov = MatrixXd::Identity(param.nAtom, param.nAtom);
+  MatrixXd cov;
+  generateInitialAtoms(cov, param);
   Observables observables(param.nstore);
 
   //Start simulation
   evolve(cov, param, observables);
-
   //Write Observables
   ObservableFiles observableFiles;
   writeObservables(observableFiles, observables);
@@ -175,3 +182,4 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+        //std::cout << "here" << std::endl << std::endl;

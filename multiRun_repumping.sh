@@ -12,22 +12,22 @@ do
 w=$(echo "$init + $interval * $i" | bc -l)
 
 if (( $(bc <<< "w < 1") ))
-	then
+then
 	printf "dt 0.01
-			tmax 20
-			nstore 100
-			nAtom 100
-			gammac 0.1
-			repumping $w
-			name N100_repumping0${w}" > $iFile
-	else
+	tmax 20
+	nstore 100
+	nAtom 100
+	gammac 0.1
+	repumping $w			
+	name N100_repumping0${w}" > $iFile
+else
 	printf "dt 0.01
-			tmax 20
-			nstore 100
-			nAtom 100
-			gammac 0.1
-			repumping $w
-			name N100_repumping${w}" > $iFile
+	tmax 20
+	nstore 100
+	nAtom 100
+	gammac 0.1
+	repumping $w
+	name N100_repumping${w}" > $iFile
 fi
 
 
