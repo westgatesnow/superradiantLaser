@@ -66,11 +66,15 @@ void getParam(const char* filename, Param *param)
 }
 
 void generateInitialAtoms(MatrixXd& cov, const Param& param)
-{
+{ 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Start from Exctied states
   //cov = MatrixXd::Identity(param.nAtom, param.nAtom);
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Start from Ground states
   cov = MatrixXd::Zero(param.nAtom, param.nAtom);
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 MatrixXd RHS(const MatrixXd& cov, const Param& param)
@@ -110,8 +114,8 @@ void advanceInterval(MatrixXd& cov, const Param& param)
 void storeObservables(Observables& observables, int s, const MatrixXd& cov, 
     const Param& param)
 {
-  observables.intensity(s) = param.gammac*cov.sum();//
-  observables.intensityUnCor(s) = param.gammac*cov.diagonal().sum();
+  observables.intensity(s) = cov.sum()*param.gammac;//
+  observables.intensityUnCor(s) = cov.diagonal().sum()*param.gammac;
   observables.inversion(s) = (2*cov.diagonal().sum()-param.nAtom)/param.nAtom;
   observables.spinSpinCor(s) = (cov.sum()-cov.diagonal().sum())/(param.nAtom*(param.nAtom-1));
 }
