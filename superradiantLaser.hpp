@@ -1,15 +1,11 @@
 #ifndef __SUPERRADIANTLASER__HPP__
 #define __SUPERRADIANTLASER__HPP__
-//This program is used to simulate the superradiant laser using the cumulant expansion method.
+//This program is used to simulate the superradiant laser 
+//  --using the cumulant method 
+//  --without the cavity variables
+//  --using the individual variables.
 
-//Include Eigen package
-//Work in Eigen namespace
-#include <Eigen/Core>
-#include <Eigen/StdVector>
-#include <Eigen/Eigenvalues>
-using namespace Eigen;
-
-//Include standard packages
+//Include packages
 #include <vector>
 #include <complex>
 #include <iostream>
@@ -17,27 +13,17 @@ using namespace Eigen;
 #include <cmath>
 #include <getopt.h>
 #include <time.h>
+#include <stdlib.h> 
+//Include Eigen package;
+#include <Eigen/Core>
+#include <Eigen/StdVector>
+#include <Eigen/Eigenvalues>
+using namespace Eigen;
 
-#define NVAR 3 // 3 variables; sigmaX, sigmaY, sigmaZ
+//Include and define RNG;
+#include "RNG.hpp"
+RNG rng(time(NULL));
 
-//Define the complex I and ONE
-static const std::complex<double> I = std::complex<double>(0.0,1.0);
-static const std::complex<double> ONE = std::complex<double>(1.0,0.0);
-
-typedef struct {
-  const char* configFile;
-} CmdLineArgs;
-
-const char* usageHeader = "\nSuperradiant Laser Simulation.\n";
-const char* usageMessage =
-  "\n"
-  "Usage:         "
-  "beamLaser "
-  "--file"
-  "\n"
-  "--file, -f     : Configuration file to setup the simulation\n"
-  "--help, -h     : Print this usage message\n"
-  "\n\n";
 
 //Simulation parameters
 typedef struct Param {

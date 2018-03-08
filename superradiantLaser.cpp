@@ -1,36 +1,11 @@
-//This program is used to simulate the superradiant laser using the cumulant expansion method.
+//This program is used to simulate the superradiant laser 
+//  --using the cumulant method 
+//  --without the cavity variables
+//  --using the individual variables.
 #include "superradiantLaser.hpp"
+#include "config.hpp"
 
-void getOptions(int argc, char** argv, CmdLineArgs* cmdLineArgs)
-{
-  cmdLineArgs->configFile="sampleSimulation.txt";
-  while (1) {
-    int c;
-    static struct option long_options[] = {
-      {"help", no_argument, 0, 'h'},
-      {"file", required_argument, 0, 'f'},
-      {0, 0, 0, 0}
-    };
-    int option_index = 0;
-    c = getopt_long(argc, argv, "hf:", long_options, &option_index);
-    if (c == -1) break;
-    switch (c) {
-      case 'h': std::cout << usageHeader << usageMessage;
-        exit(0);
-      case 'f': cmdLineArgs->configFile = optarg;
-        break;
-      default: exit(-1);
-    }
-  }
-  if (optind < argc) {
-    std::cout << "Error: non-option arguments: ";
-    while (optind < argc) std::cout << argv[optind++] << " ";
-    std::cout << std::endl;
-    exit(-1);
-  }
-  std::cout << "Using parameters file " << cmdLineArgs->configFile << std::endl;
-}
-
+//Changes required subject to the definition of Param 
 void getParam(const char* filename, Param *param) 
 {
   std::ifstream configInput(filename);
@@ -67,14 +42,8 @@ void getParam(const char* filename, Param *param)
 
 void generateInitialAtoms(MatrixXd& cov, const Param& param)
 { 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Start from Exctied states
-  //cov = MatrixXd::Identity(param.nAtom, param.nAtom);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Start from Ground states
   cov = MatrixXd::Zero(param.nAtom, param.nAtom);
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 MatrixXd RHS(const MatrixXd& cov, const Param& param)
@@ -122,19 +91,16 @@ void storeObservables(Observables& observables, int s, const MatrixXd& cov,
 
 void evolve(MatrixXd& cov, const Param& param, Observables& observables)
 {
-  //Integration conditions
-  double dt = param.dt;
-  double tmax = param.tmax;
-  
   //evolve
-  int nTimeStep = tmax/dt+0.5;
-  double tstep = dt, t=0;
-
-  for (int n = 0, s = 0; n <= nTimeStep; n++, t += tstep) {
+  int nTimeStep = param.tmax/param.dt+0.5;
+  double t = 0;
+  
+  //For "nTimeStep" number of data, keep "nstore" of them. 
+  for (int n = 0, s = 0; n <= nTimeStep; n++, t += param.dt) {
     if ((long)(n+1)*param.nstore/(nTimeStep+1) > s) {
       storeObservables(observables, s++, cov, param);
       //debug
-      //std::cout << "This is timestep " << n << "/" << nTimeStep << std::endl << std::endl;
+      std::cout << "Data " << s << "/" << param.nstore << " stored." << std::endl << std::endl;
       //debug
     }
     if (n != nTimeStep)
@@ -162,6 +128,11 @@ void mkdir(Param& param) {
 
 int main(int argc, char *argv[])
 {
+  //Count time
+  clock_t t1,t2;
+  t1=clock();
+/////////////////////////////////////////////////////////////////////////////
+
   //Configuration
   CmdLineArgs config;
   getOptions(argc, argv, &config);
@@ -184,6 +155,10 @@ int main(int argc, char *argv[])
   //Move .dat files into the directory named "name"
   mkdir(param);
 
+///////////////////////////////////////////////////////////////////////////////
+  //Count time
+  t2=clock();
+  float diff = ((float)t2-(float)t1)/CLOCKS_PER_SEC;
+  std::cout << "\nThis program takes " << diff << " seconds." << std::endl << std::endl;
   return 0;
 }
-        //std::cout << "here" << std::endl << std::endl;
