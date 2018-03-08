@@ -20,11 +20,6 @@
 #include <Eigen/Eigenvalues>
 using namespace Eigen;
 
-//Include and define RNG;
-#include "RNG.hpp"
-RNG rng(time(NULL));
-
-
 //Simulation parameters
 typedef struct Param {
   //simulation specification
